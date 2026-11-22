@@ -17,7 +17,7 @@
     }
     video { width: 100%; height: 230px; background: #000; display: block; }
     .controls { display: flex; gap: 10px; padding: 10px; background: #1a1a1a; border-radius: 10px; margin-bottom: 15px; }
-    select { flex: 1; padding: 12px; border: none; border-radius: 8px; background: #2a2a2a; color: #fff; font-size: 14px; }
+    select, input { flex: 1; padding: 12px; border: none; border-radius: 8px; background: #2a2a2a; color: #fff; font-size: 14px; }
     button { padding: 12px 20px; border: none; border-radius: 8px; background: #e50914; color: #fff; font-weight: bold; cursor: pointer; transition: 0.2s; }
     button:hover { background: #b20710; }
     #playlist { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 10px 0 80px 0; }
@@ -33,27 +33,15 @@
   <div class="container">
     <div class="controls">
       <select id="m3uUrl">
+        <option value="">-- اختر قائمة iptv-org --</option>
         <option value="https://iptv-org.github.io/iptv/index.m3u">🌍 كل القنوات +12K</option>
-        <option value="https://iptv-org.github.io/iptv/index.country.m3u">🏳️ حسب الدولة</option>
-        <option value="https://iptv-org.github.io/iptv/index.category.m3u">📂 حسب التصنيف</option>
-        
-        <!-- قوائم حسب التصنيف -->
         <option value="https://iptv-org.github.io/iptv/categories/sports.m3u" selected>⚽ الرياضة 320</option>
         <option value="https://iptv-org.github.io/iptv/categories/news.m3u">📰 الأخبار 930</option>
-        <option value="https://iptv-org.github.io/iptv/categories/movies.m3u">🎬 الأفلام 350</option>
-        <option value="https://iptv-org.github.io/iptv/categories/music.m3u">🎵 الموسيقى 650</option>
-        <option value="https://iptv-org.github.io/iptv/categories/kids.m3u">👶 أطفال</option>
-        
-        <!-- قوائم حسب الدول العربية -->
         <option value="https://iptv-org.github.io/iptv/countries/dz.m3u">🇩🇿 الجزائر</option>
-        <option value="https://iptv-org.github.io/iptv/countries/ma.m3u">🇲🇦 المغرب</option>
-        <option value="https://iptv-org.github.io/iptv/countries/eg.m3u">🇪🇬 مصر</option>
-        <option value="https://iptv-org.github.io/iptv/countries/sa.m3u">🇸🇦 السعودية</option>
-        <option value="https://iptv-org.github.io/iptv/countries/ae.m3u">🇦🇪 الإمارات</option>
-        <option value="https://iptv-org.github.io/iptv/countries/qa.m3u">🇶🇦 قطر</option>
         
-        <!-- اللغة العربية -->
-        <option value="https://iptv-org.github.io/iptv/languages/ar.m3u">🗣️ العربية</option>
+        <!-- هنا تحط الروابط الخاصة بيك مستقبلا -->
+        <option value="http://vpnca.ipnowstore.com:80/get.php?username=Po2PUHp5in&password=sD5akh8heg&type=m3u_plus&output=m3u8">🔒 السيرفر الخاص</option>
+        
       </select>
       <button onclick="loadM3U()">تحميل</button>
     </div>
@@ -71,29 +59,49 @@ let hls, activeBtn = null;
 async function loadM3U() {
   document.getElementById('errorMsg').innerText = "جاري التحميل...";
   const url = document.getElementById('m3uUrl').value;
+  if(!url) return document.getElementById('errorMsg').innerText = "اختر قائمة أولا";
+  
   try{
-    const res = await fetch(url); const text = await res.text(); const lines = text.split('\n');
-    const playlistDiv = document.getElementById('playlist'); playlistDiv.innerHTML = '';
+    const res = await fetch(url); 
+    const text = await res.text(); 
+    const lines = text.split('\n');
+    const playlistDiv = document.getElementById('playlist'); 
+    playlistDiv.innerHTML = '';
+    
     for(let i=0; i<lines.length; i++){
       if(lines[i].startsWith('#EXTINF')){
-        const name = lines[i].split(',')[1] || "قناة"; const link = lines[i+1];
+        const name = lines[i].split(',')[1] || "قناة"; 
+        const link = lines[i+1];
         if(link && link.startsWith('http')){
-          const btn = document.createElement('div'); btn.className = 'channel'; btn.innerText = name;
+          const btn = document.createElement('div'); 
+          btn.className = 'channel'; 
+          btn.innerText = name;
           btn.onclick = () => {
             playChannel(link);
             if(activeBtn) activeBtn.classList.remove('active');
-            btn.classList.add('active'); activeBtn = btn;
+            btn.classList.add('active'); 
+            activeBtn = btn;
           };
           playlistDiv.appendChild(btn);
         }
       }
     }
     document.getElementById('errorMsg').innerText = "تم تحميل " + playlistDiv.children.length + " قناة";
-  }catch(e){ document.getElementById('errorMsg').innerText = "فشل التحميل. جرب VPN"; }
+  }catch(e){ 
+    document.getElementById('errorMsg').innerText = "فشل التحميل. السيرفر الخاص لازم httpS أو VPN"; 
+  }
 }
 function playChannel(url){
-  const video = document.getElementById('video'); document.getElementById('errorMsg').innerText = "جاري التشغيل...";
-  if(hls) hls.destroy(); if(Hls.isSupported()){ hls = new Hls(); hls.loadSource(url); hls.attachMedia(video); } else { video.src = url; }
+  const video = document.getElementById('video'); 
+  document.getElementById('errorMsg').innerText = "جاري التشغيل...";
+  if(hls) hls.destroy(); 
+  if(Hls.isSupported()){ 
+    hls = new Hls(); 
+    hls.loadSource(url); 
+    hls.attachMedia(video); 
+  } else { 
+    video.src = url; 
+  }
   video.play().catch(e => { document.getElementById('errorMsg').innerText = "اضغط تشغيل يدوي"; });
 }
 window.onload = loadM3U;
