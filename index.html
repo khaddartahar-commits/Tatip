@@ -29,17 +29,31 @@
   </style>
 </head>
 <body>
-  <header><h1>📺 Ltprysm Web Player</h1></header>
+  <header><h1>Ltprysm Web Player 📺</h1></header>
   <div class="container">
     <div class="controls">
       <select id="m3uUrl">
         <option value="https://iptv-org.github.io/iptv/index.m3u">🌍 كل القنوات +12K</option>
         <option value="https://iptv-org.github.io/iptv/index.country.m3u">🏳️ حسب الدولة</option>
         <option value="https://iptv-org.github.io/iptv/index.category.m3u">📂 حسب التصنيف</option>
+        
+        <!-- قوائم حسب التصنيف -->
         <option value="https://iptv-org.github.io/iptv/categories/sports.m3u" selected>⚽ الرياضة 320</option>
         <option value="https://iptv-org.github.io/iptv/categories/news.m3u">📰 الأخبار 930</option>
         <option value="https://iptv-org.github.io/iptv/categories/movies.m3u">🎬 الأفلام 350</option>
         <option value="https://iptv-org.github.io/iptv/categories/music.m3u">🎵 الموسيقى 650</option>
+        <option value="https://iptv-org.github.io/iptv/categories/kids.m3u">👶 أطفال</option>
+        
+        <!-- قوائم حسب الدول العربية -->
+        <option value="https://iptv-org.github.io/iptv/countries/dz.m3u">🇩🇿 الجزائر</option>
+        <option value="https://iptv-org.github.io/iptv/countries/ma.m3u">🇲🇦 المغرب</option>
+        <option value="https://iptv-org.github.io/iptv/countries/eg.m3u">🇪🇬 مصر</option>
+        <option value="https://iptv-org.github.io/iptv/countries/sa.m3u">🇸🇦 السعودية</option>
+        <option value="https://iptv-org.github.io/iptv/countries/ae.m3u">🇦🇪 الإمارات</option>
+        <option value="https://iptv-org.github.io/iptv/countries/qa.m3u">🇶🇦 قطر</option>
+        
+        <!-- اللغة العربية -->
+        <option value="https://iptv-org.github.io/iptv/languages/ar.m3u">🗣️ العربية</option>
       </select>
       <button onclick="loadM3U()">تحميل</button>
     </div>
