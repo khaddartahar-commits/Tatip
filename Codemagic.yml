@@ -1,0 +1,32 @@
+workflows:
+  tatip-android:
+    name: Tatip VPN Android Build
+    max_build_duration: 60
+    environment:
+      vars:
+        ANDROID_COMPILE_SDK: "34"
+        ANDROID_BUILD_TOOLS: "34.0.0"
+        ANDROID_SDK_TOOLS: "8512546"
+      android_signing:
+        - keystore_credentials
+    cache:
+      cache_paths:
+        - $HOME/.gradle/caches
+        - $HOME/.gradle/wrapper
+    scripts:
+      - name: Set up Android SDK
+        script: |
+          export ANDROID_SDK_ROOT=/Users/builder/Library/Android/sdk
+          yes | sdkmanager --licenses
+      - name: Install dependencies
+        script: |
+          ./gradlew dependencies
+      - name: Build Debug APK
+        script: |
+          ./gradlew :app:assembleDebug
+    artifacts:
+      - app/build/outputs/apk/debug/*.apk
+    publishing:
+      email:
+        recipients:
+          - your-email@gmail.com
